@@ -1,0 +1,15 @@
+#!/bin/sh -x
+
+set -eu
+
+(
+wget http://sourceforge.net/projects/strace/files/latest/download -O strace.tar.xz
+tar xvf strace.tar.xz
+cd strace*
+
+export LDFLAGS=-static
+./configure --prefix=/opt/strace
+make -j $(( 1 + $(grep -c proc /proc/cpuinfo) )) install
+find /opt/strace
+) >&2
+tar -c /opt/strace

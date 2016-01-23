@@ -1,0 +1,7 @@
+FROM scratch
+
+ADD strace.tar .
+
+ENTRYPOINT ["/opt/strace/strace"]
+
+VOLUME /opt/strace
