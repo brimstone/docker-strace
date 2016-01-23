@@ -5,6 +5,15 @@ strace
 
 Usage
 =====
+Create the strace container for usage as a volume
+```
+docker create --name strace brimstone/strace
+```
+Pick any image
+```
+image="brimstone/vim-static"
+```
+Run strace in the context of that image
 ```
 docker run --rm -it \
 	--volumes-from strace \
@@ -12,8 +21,9 @@ docker run --rm -it \
 	-v $PWD:$PWD \
 	-w $PWD \
 	-u $UID:$GID \
-	brimstone/vim-static \
+	"$image" \
 	-e open \
 	-o strace.log \
-	/opt/vim/bin/vim
+	$(docker inspect -f '{{range .Config.Entrypoint}}{{.}} {{end}}' "$image")
+	$(docker inspect -f '{{range .Config.Cmd}}{{.}} {{end}}' "$image")
 ```
